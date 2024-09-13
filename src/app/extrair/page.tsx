@@ -1,33 +1,60 @@
 "use client"
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { DollarSign } from 'lucide-react';
-import { useState } from 'react';
+import { Factory, Plane, ShoppingCart, Truck, Wine } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function Extrair() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [response, setResponse] = useState<string | object>('');
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJSZW5hdG9tIiwiZXhwIjoxNzI2NTk5NzE3fQ.1VzRQRXAaHdms69igIbk0kQvstSScV_BiDALQURAwcI'; // Substitua pelo seu token Bearer
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth/login');
+    }
+  }, [status, router]);
 
   const handleButtonClick = async (endpoint: string) => {
+    if (!session?.accessToken) {
+      setResponse('Token não encontrado');
+      setSuccessMessage(null);
+      return;
+    }
     try {
       const res = await fetch(`http://localhost:8000/api/v1/${endpoint}`, {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${session.accessToken}`,
         },
       });
       if (!res.ok) {
-        throw new Error(`Erro ao chamar o endpointtt: ${res.statusText}`);
+        throw new Error(`Erro ao chamar o endpoint: ${res.statusText}`);
       }
       const data = await res.json();
       setResponse(data);
-      setSuccessMessage('Dados baixados com sucesso!');
+      if (data.status == 'Dados de produção extraídos com sucesso') {
+        setSuccessMessage('Dados baixados com sucesso!');
+      }
+      if (data.status == 'Usuário não autorizado"') {
+        setSuccessMessage('Usuário não autorizado"!');
+      }
     } catch (error) {
       setResponse('Erro ao chamar o endpoint');
       setSuccessMessage(null);
     }
   };
+
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
+
+  if (status === 'unauthenticated') {
+    return null;
+  }
 
   return (
     <main className='flex flex-col items-center justify-center sm:ml-14 p-4'>
@@ -39,7 +66,7 @@ export default function Extrair() {
               <CardTitle className='text-lg sm:text-xl text-gray-800 select-none'>
                 Produção
               </CardTitle>
-              <DollarSign className='ml-auto w-4 h-4' />
+              <Factory className='ml-auto w-4 h-4' />
             </div>
             <CardDescription>
               Extração dos dados de produção para a Vinicola VitiVinicultura
@@ -61,7 +88,7 @@ export default function Extrair() {
               <CardTitle className='text-lg sm:text-xl text-gray-800 select-none'>
                 Processamento
               </CardTitle>
-              <DollarSign className='ml-auto w-4 h-4' />
+              <Wine className='ml-auto w-4 h-4' />
             </div>
             <CardDescription>
               Extração dos dados de processamento de uvas para a Vinícola VitiVinicultura
@@ -83,7 +110,7 @@ export default function Extrair() {
               <CardTitle className='text-lg sm:text-xl text-gray-800 select-none'>
                 Comercialização
               </CardTitle>
-              <DollarSign className='ml-auto w-4 h-4' />
+              <ShoppingCart className='ml-auto w-4 h-4' />
             </div>
             <CardDescription>
               Extração dos dados de comercialização de uvas Viníferas, Americanas, Uvas de mesa e sem classificação da a Vinícola VitiVinicultura
@@ -105,7 +132,7 @@ export default function Extrair() {
               <CardTitle className='text-lg sm:text-xl text-gray-800 select-none'>
                 Importação
               </CardTitle>
-              <DollarSign className='ml-auto w-4 h-4' />
+              <Truck className='ml-auto w-4 h-4' />
             </div>
             <CardDescription>
               Extração dos dados de Importação de Vinhos de mesa, Espumantes, Uvas frescas, passas e suco de uva da a Vinícola VitiVinicultura
@@ -127,7 +154,7 @@ export default function Extrair() {
               <CardTitle className='text-lg sm:text-xl text-gray-800 select-none'>
                 Exportação
               </CardTitle>
-              <DollarSign className='ml-auto w-4 h-4' />
+              <Plane className='ml-auto w-4 h-4' />
             </div>
             <CardDescription>
               Extração dos dados de exportação de Vinhos de mesa, Espumantes, Uvas frescas e suco de uva da a Vinícola VitiVinicultura
