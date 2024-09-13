@@ -1,8 +1,9 @@
 import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet'
 import { Button } from '../ui/button'
 import Link from 'next/link'
-import { Home, LogOut, Package, PanelBottom, Settings2, ShoppingBag, Users } from 'lucide-react'
+import { Home, Package, PanelBottom, Settings2, ShoppingBag, Users } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip'
+import LogoutButton from '../LogoutButton'
 
 export function Sidebar() {
   return (
@@ -23,15 +24,15 @@ export function Sidebar() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href="#"
+                  href="/dashboard"
                   className='flex h-9 w-9 shrink-0 items-center justify-center rounded-lg
                    text-muted-foreground transition-colors hover:text-foreground'
                 >
                   <Home className='h-5 w-5' />
-                  <span className='sr-only'>Início</span>
+                  <span className='sr-only'>Dashboard</span>
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="right">Início</TooltipContent>
+              <TooltipContent side="right">Dashboard</TooltipContent>
             </Tooltip>
 
             <Tooltip>
@@ -92,21 +93,7 @@ export function Sidebar() {
           </TooltipProvider>
         </nav>
         <nav className='mt-auto flex flex-col items-center gap-4 px-2 py-5'>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="#"
-                  className='flex h-9 w-9 shrink-0 items-center justify-center rounded-lg 
-                    text-muted-foreground transition-colors hover:text-foreground'
-                >
-                  <LogOut className='h-5 w-5 text-red-500' />
-                  <span className='sr-only'>Sair</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Sair</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <LogoutButton />
         </nav>
 
       </aside>
