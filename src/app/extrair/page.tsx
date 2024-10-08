@@ -2,28 +2,25 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Factory, Plane, ShoppingCart, Truck, Wine } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import useAuth from '@/components/hooks/useAuth';
 
 export default function Extrair() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-  const [response, setResponse] = useState<string | object>('');
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/login');
-    }
-  }, [status, router]);
+  const { session, status } = useAuth(); // Use o hook personalizado
 
   const handleButtonClick = async (endpoint: string) => {
     if (!session?.accessToken) {
-      setResponse('Token não encontrado');
       setSuccessMessage(null);
+      setErrorMessage('Usuário não encontrado');
       return;
     }
+    setLoading(true);
+    setSuccessMessage(null);
+    setErrorMessage(null);
     try {
       const res = await fetch(`http://localhost:8000/api/v1/${endpoint}`, {
         method: 'GET',
@@ -35,16 +32,17 @@ export default function Extrair() {
         throw new Error(`Erro ao chamar o endpoint: ${res.statusText}`);
       }
       const data = await res.json();
-      setResponse(data);
-      if (data.status == 'Dados de produção extraídos com sucesso') {
-        setSuccessMessage('Dados baixados com sucesso!');
-      }
-      if (data.status == 'Usuário não autorizado"') {
-        setSuccessMessage('Usuário não autorizado"!');
+      if (data.status === 'Dados de produção extraídos com sucesso') {
+        setSuccessMessage('Dados carregados com sucesso no data-lake!');
+      } else if (data.status === 'Usuário não autorizado') {
+        setErrorMessage('Usuário não autorizado!');
+      } else {
+        setSuccessMessage('Dados carregados com sucesso no data-lake!');
       }
     } catch (error) {
-      setResponse('Erro ao chamar o endpoint');
-      setSuccessMessage(null);
+      setErrorMessage('Erro ao carregar os dados no data-lake');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -76,8 +74,9 @@ export default function Extrair() {
             <Button
               className=' w-full p-2 rounded'
               onClick={() => handleButtonClick('producao/download-arquivo')}
+              disabled={loading}
             >
-              Baixar dados
+              {loading ? 'Carregando...' : 'Baixar dados'}
             </Button>
           </CardContent>
         </Card>
@@ -98,8 +97,9 @@ export default function Extrair() {
             <Button
               className='w-full p-2 rounded'
               onClick={() => handleButtonClick('processamento/download-arquivo')}
+              disabled={loading}
             >
-              Baixar dados
+              {loading ? 'Carregando...' : 'Baixar dados'}
             </Button>
           </CardContent>
         </Card>
@@ -120,8 +120,9 @@ export default function Extrair() {
             <Button
               className='w-full p-2 rounded'
               onClick={() => handleButtonClick('comercializacao/download-arquivo')}
+              disabled={loading}
             >
-              Baixar dados
+              {loading ? 'Carregando...' : 'Baixar dados'}
             </Button>
           </CardContent>
         </Card>
@@ -142,8 +143,9 @@ export default function Extrair() {
             <Button
               className='w-full p-2 rounded'
               onClick={() => handleButtonClick('importacao/download-arquivo')}
+              disabled={loading}
             >
-              Baixar dados
+              {loading ? 'Carregando...' : 'Baixar dados'}
             </Button>
           </CardContent>
         </Card>
@@ -164,8 +166,9 @@ export default function Extrair() {
             <Button
               className='w-full p-2 rounded'
               onClick={() => handleButtonClick('exportacao/download-arquivo')}
+              disabled={loading}
             >
-              Baixar dados
+              {loading ? 'Carregando...' : 'Baixar dados'}
             </Button>
           </CardContent>
         </Card>
@@ -178,7 +181,12 @@ export default function Extrair() {
             <span className='block sm:inline'>{successMessage}</span>
           </div>
         )}
-        <pre className='bg-gray-100 p-4 rounded border'>{typeof response === 'string' ? response : JSON.stringify(response, null, 2)}</pre>
+        {errorMessage && (
+          <div className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative' role='alert'>
+            <strong className='font-bold'>Erro! </strong>
+            <span className='block sm:inline'>{errorMessage}</span>
+          </div>
+        )}
       </div>
     </main>
   );
