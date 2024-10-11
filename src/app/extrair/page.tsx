@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,7 +14,7 @@ export default function Extrair() {
   const { session, status } = useAuth(); // Use o hook personalizado
 
   const handleButtonClick = async (endpoint: string) => {
-    if (!session?.accessToken) {
+    if (!(session as any)?.accessToken) {
       setSuccessMessage(null);
       setErrorMessage('Usuário não encontrado');
       return;
@@ -25,7 +26,7 @@ export default function Extrair() {
       const res = await fetch(`http://localhost:8000/api/v1/${endpoint}`, {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${session.accessToken}`,
+          Authorization: `Bearer ${(session as any)?.accessToken}`,
         },
       });
       if (!res.ok) {
