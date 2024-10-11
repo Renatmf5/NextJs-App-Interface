@@ -48,7 +48,7 @@ export default function Dados() {
           const response = await fetch('http://localhost:8000/api/v1/fetch-data/tables', {
             method: 'GET',
             headers: {
-              Authorization: `Bearer ${session?.accessToken}`,
+              Authorization: `Bearer ${(session as any)?.accessToken}`,
             },
           });
           if (!response.ok) {
@@ -88,7 +88,7 @@ export default function Dados() {
       const response = await fetch(`http://localhost:8000/api/v1/fetch-data/?${queryParams.toString()}`, {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${session?.accessToken}`,
+          Authorization: `Bearer ${(session as any)?.accessToken}`,
         },
       });
       if (!response.ok) {
