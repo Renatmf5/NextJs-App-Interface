@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import useAuth from '@/components/hooks/useAuth';
+import apiUrl from '@/config/config';
 
 // Definição do modelo DataResponse para corresponder ao modelo no backend
 interface DataResponse {
@@ -45,7 +46,7 @@ export default function Dados() {
 
       const fetchTables = async () => {
         try {
-          const response = await fetch('http://localhost:8000/api/v1/fetch-data/tables', {
+          const response = await fetch(`${apiUrl}/fetch-data/tables`, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${(session as any)?.accessToken}`,
@@ -85,7 +86,7 @@ export default function Dados() {
     });
 
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/fetch-data/?${queryParams.toString()}`, {
+      const response = await fetch(`${apiUrl}/fetch-data/?${queryParams.toString()}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${(session as any)?.accessToken}`,

@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import LinearChart from '@/components/chart/LinearChart';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart2 } from 'lucide-react';
+import apiUrl from '@/config/config';
 
 export default function Analitcs() {
   const [table, setTable] = useState('');
@@ -25,7 +26,7 @@ export default function Analitcs() {
     if (status === 'authenticated') {
       const fetchTables = async () => {
         try {
-          const response = await fetch('http://localhost:8000/api/v1/fetch-data/tables', {
+          const response = await fetch(`${apiUrl}/fetch-data/tables`, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${(session as any)?.accessToken}`,
@@ -59,7 +60,7 @@ export default function Analitcs() {
 
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:8000/api/v1/ml-models/train?${queryParams}`, {
+      const response = await fetch(`${apiUrl}/ml-models/train?${queryParams}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${(session as any)?.accessToken}`,
@@ -103,7 +104,7 @@ export default function Analitcs() {
 
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:8000/api/v1/ml-models/predict?${queryParams}`, {
+      const response = await fetch(`${apiUrl}/ml-models/predict?${queryParams}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${(session as any)?.accessToken}`,

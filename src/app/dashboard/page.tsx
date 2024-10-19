@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { EditProfile } from '@/components/EditProfile';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import apiUrl from '@/config/config';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -26,14 +28,14 @@ export default function Dashboard() {
   }, [status, router]);
 
   useEffect(() => {
-    if (session?.accessToken) {
-      fetchUserAttributes(session.accessToken);
+    if ((session as any)?.accessToken) {
+      fetchUserAttributes((session as any).accessToken);
     }
   }, [session]);
 
   const fetchUserAttributes = async (token: string) => {
     try {
-      const res = await fetch('http://localhost:8000/api/v1/usuarios/logado', {
+      const res = await fetch(`${apiUrl}/usuarios/logado`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,

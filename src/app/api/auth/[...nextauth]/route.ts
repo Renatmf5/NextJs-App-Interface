@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import apiUrl from '@/config/config';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
@@ -11,7 +13,7 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         try {
-          const res = await fetch('http://localhost:8000/api/v1/usuarios/login', {
+          const res = await fetch(`${apiUrl}/usuarios/login`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
@@ -43,12 +45,12 @@ const handler = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.accessToken = user.access_token;
+        token.accessToken = (user as any)?.access_token;
       }
       return token;
     },
     async session({ session, token }) {
-      session.accessToken = token.accessToken;
+      (session as any).accessToken = token.accessToken;
       return session;
     },
   },

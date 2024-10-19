@@ -24,6 +24,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from 'react';
+import apiUrl from '@/config/config';
 
 export function EditProfile({ id }: { id: number }) {
   const [open, setOpen] = useState(false)
@@ -83,7 +84,7 @@ function ProfileForm({ id, className, setOpen }: { id: number; className?: strin
       return;
     }
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/usuarios/${id}`, {
+      const res = await fetch(`${apiUrl}/usuarios/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

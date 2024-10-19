@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import apiUrl from '@/config/config';
 
 export default function Signup() {
   const [username, setUsername] = useState('');
@@ -20,7 +21,7 @@ export default function Signup() {
       return;
     }
     try {
-      const res = await fetch('http://localhost:8000/api/v1/usuarios/signup', {
+      const res = await fetch(`${apiUrl}/usuarios/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
