@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Factory, Plane, ShoppingCart, Truck, Wine } from 'lucide-react';
 import { useState } from 'react';
 import useAuth from '@/components/hooks/useAuth';
+import apiUrl from '@/config/config';
 
 export default function Extrair() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -12,6 +13,7 @@ export default function Extrair() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const { session, status } = useAuth(); // Use o hook personalizado
+  console.log('url de api usada: ', apiUrl);
 
   const handleButtonClick = async (endpoint: string) => {
     if (!(session as any)?.accessToken) {
@@ -23,7 +25,7 @@ export default function Extrair() {
     setSuccessMessage(null);
     setErrorMessage(null);
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/${endpoint}`, {
+      const res = await fetch(`${apiUrl}/${endpoint}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${(session as any)?.accessToken}`,
