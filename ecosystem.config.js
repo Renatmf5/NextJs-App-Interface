@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'nextjs-app',
+      name: 'web-nextjs-app',
       script: 'npm',
       args: 'start',
       env: {
