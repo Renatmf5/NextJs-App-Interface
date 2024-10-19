@@ -6,3 +6,6 @@ cd ${DIR}
 
 # Instalar dependências do projeto usando npm
 npm install 
+
+# Construir a aplicação Next.js
+npm run build
