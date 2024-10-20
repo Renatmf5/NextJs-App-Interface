@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: false,
   env: {
-    SUBDOMINIO: process.env.SUBDOMINIO,
+    NEXT_PUBLIC_SUBDOMINIO: process.env.SUBDOMINIO,
   },
 };
 
