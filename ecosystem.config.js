@@ -7,6 +7,7 @@ module.exports = {
       env: {
         NODE_ENV: 'production',
         SUBDOMINIO: 'api.grupo-ever-rmf.com',
+        PORT: 80,
       },
     },
   ],

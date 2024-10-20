@@ -8,5 +8,5 @@ sudo chmod -R 777 ${DIR}
 # Navegar para o diretório da aplicação
 cd ${DIR}
 
-# Iniciar a aplicação usando PM2
-pm2 start ecosystem.config.js
+# Iniciar a aplicação usando PM2 na porta 80
+sudo pm2 start ecosystem.config.js --name "web-nextjs-app" --watch -- --port 80
