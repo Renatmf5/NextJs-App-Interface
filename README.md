@@ -1,4 +1,4 @@
-# Nome da Aplicação
+# Descrição da Aplicação
 
 Aplicação é uma interface Web que faz integração com a aplicação em FastApi criado no [repositório](https://github.com/Renatmf5/API-FastApi-WebScraping) com Paginas de Autenticação e autorização de usuário, e paginas de interação com os endpoints da API.
 A interface web consiste em um Menu lateral ontem contem as pagina de.
