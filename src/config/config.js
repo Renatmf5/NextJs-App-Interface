@@ -1,5 +1,5 @@
 const apiUrl = process.env.NODE_ENV === 'production' 
-  ? 'https://' + process.env.NEXT_PUBLIC_SUBDOMINIO + '/api/v1'
+  ? 'https://api.grupo-ever-rmf.com/api/v1'
   : 'http://localhost:8000/api/v1';
 
 console.log('URL da API:', apiUrl);
